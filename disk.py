@@ -8,8 +8,11 @@ class Disk:
     def __init__(self, disk_path: str, sector_size: int = 512):
         self.disk_path = disk_path
         self.sector_size = sector_size
-        self.fd = os.open(self.disk_path, os.O_RDWR)
+        # Abrir (o crear) la imagen de disco
+        self.fd = os.open(self.disk_path, os.O_RDWR | os.O_CREAT)
         self.disk_size = os.path.getsize(self.disk_path)
+        if self.disk_size == 0:
+            raise Exception("La imagen de disco está vacía. Por favor, crea una imagen con el tamaño deseado.")
         self.num_sectors = self.disk_size // self.sector_size
 
     def read_sector(self, sector_number: int, size: int = None) -> bytes:
