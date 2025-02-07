@@ -101,58 +101,56 @@ El cifrado se basa en AES-256 en modo ECB, con una capa adicional de ofuscación
 
 ## 6. Comandos y Uso
 
-### 6.1 Formateo del Disco Virtual
-
-```sh
-python3 main.py format
+#### 6.1. Formatear el disco:
+```bash
+python3 main.py format --disk <ficher>
 ```
 
-Esto inicializa `virtual_disk.img`, creando su estructura interna.
-
-### 6.2 Creación de Archivos
-
-```sh
-python3 main.py create archivo.txt /ruta/origen.txt
+#### 6.2. Crear un archivo nuevo copiando datos desde un archivo fuente
+```bash
+python3 main.py create <nombre_fichero> <ruta_origen> --disk <archivo_disco_virtual>
+```
+Ejemplo:
+```bash
+python3 main.py create patata README.md --disk imagen_disco.img
 ```
 
-Copia los datos de `origen.txt` al sistema de archivos virtual.
-
-### 6.3 Listado de Archivos
-
-```sh
-python3 main.py list
+#### 6.3. Listar archivos:
+```bash
+python3 main.py list --disk <archivo_disco_virtual>
+```
+Ejemplo:
+```bash
+python3 main.py list --disk imagen_disco.img
 ```
 
-Muestra los archivos almacenados en el disco virtual.
-
-### 6.4 Lectura de Archivos
-
-```sh
-python3 main.py read archivo.txt
+#### 6.4. Leer un fichero
+```bash
+python3 main.py read <nombre_fichero> --disk <archivo_disco_virtual>
+```
+Ejemplo:
+```bash
+python3 main.py read patata --disk imagen_disco.img
 ```
 
-Descifra y muestra el contenido del archivo.
-
-### 6.5 Eliminación de Archivos
-
-```sh
-python3 main.py delete archivo.txt
+#### 6.5. Eliminar un fichero:
+```bash
+python3 main.py delete <nombre_fichero> --disk <archivo_disco_virtual>
+```
+Ejemplo:
+```bash
+python3 main.py delete patata --disk imagen_disco.img
 ```
 
-Marca el inodo y los bloques de datos como libres en el mapa de bits.
-
-### 6.6 Renombrado de Archivos
-
-```sh
-python3 main.py rename archivo.txt nuevo_nombre.txt
+#### 6.6. Formatear el disco virtual (elimina todos los archivos)
+```bash
+format
 ```
+**Advertencia:** Esta acción es irreversible.
 
-Actualiza el nombre en el inodo correspondiente.
-
-### 6.7 Salida del Programa
-
-```sh
-python3 main.py exit
+#### 6.7. Salir del programa
+```bash
+exit
 ```
 
 ## 7. Conclusión
