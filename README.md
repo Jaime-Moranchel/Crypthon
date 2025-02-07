@@ -23,61 +23,50 @@ El programa se ejecuta desde la línea de comandos con permisos de superusuario:
 
 ```bash
 dd if=/dev/zero of=virtual_disk.img bs=1M count=500 # Esto crea una imagen de disco vacía de 500 MB
-python3 main.py <archivo_disco_virtual>
-```
-
-Ejemplo:
-
-```bash
-python3 main.py virtual_disk.img
+python3 main.py <archivo_disco_virtual> <opciones>
 ```
 
 ### Comandos Disponibles
 
-#### 1. Listar archivos existentes
+#### 1. Formatear el disco:
 ```bash
-list
-```
-**Ejemplo de salida:**
-```
-archivo1.txt 4.2 KB
-imagen.jpg 2.3 MB
+python3 main.py format --disk <ficher>
 ```
 
 #### 2. Crear un archivo nuevo copiando datos desde un archivo fuente
 ```bash
-create <nombre_archivo> <ruta_fuente>
+python3 main.py create <nombre_fichero> <ruta_origen> --disk <archivo_disco_virtual>
 ```
 Ejemplo:
 ```bash
-create documento.txt /home/user/documento_original.txt
+python3 main.py create patata README.md --disk imagen_disco.img
 ```
 
-#### 3. Leer el contenido de un archivo
+#### 3. Listar archivos:
 ```bash
-read <nombre_archivo>
+python3 main.py list --disk <archivo_disco_virtual>
 ```
 Ejemplo:
 ```bash
-read documento.txt
+python3 main.py list --disk imagen_disco.img
 ```
 
-#### 4. Eliminar un archivo
+#### 4. Leer un fichero
 ```bash
-delete <nombre_archivo>
+python3 main.py read <nombre_fichero> --disk <archivo_disco_virtual>
 ```
 Ejemplo:
 ```bash
-delete documento.txt
+python3 main.py read patata --disk imagen_disco.img
 ```
 
-#### 5. Renombrar un archivo
+#### 5. Eliminar un fichero:
 ```bash
-rename <nombre_actual> <nuevo_nombre>
+python3 main.py delete <nombre_fichero> --disk <archivo_disco_virtual>
 ```
 Ejemplo:
 ```bash
-rename documento.txt informe_final.txt
+python3 main.py delete patata --disk imagen_disco.img
 ```
 
 #### 6. Formatear el disco virtual (elimina todos los archivos)
