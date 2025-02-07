@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# main.py
 import argparse
 from disk import Disk
 from fs import FileSystem
@@ -12,7 +11,7 @@ def main():
     parser.add_argument("disk_image", help="Ruta al archivo de imagen de disco (ej. virtual_disk.img)")
     args = parser.parse_args()
 
-    # Inicializar el “disco”
+    # Inicializar el disco
     disk = Disk(args.disk_image, sector_size=512)
     # Solicitar credenciales
     password = input("Ingrese password: ")
@@ -24,53 +23,62 @@ def main():
     print("Sistema de archivos inicializado.")
     print("Comandos disponibles: list, create, read, delete, rename, format, exit")
     while True:
-        cmd = input("pycrypt> ").strip().lower()
-        if cmd == "exit":
+        cmd_input = input("pycrypt> ").strip()
+        if not cmd_input:
+            continue
+        # Separa el comando de los argumentos
+        parts = cmd_input.split(" ", 1)
+        command = parts[0].lower()  # Solo el comando se pasa a minúsculas
+        args_str = parts[1] if len(parts) > 1 else ""
+        
+        if command == "exit":
             break
-        elif cmd == "list":
+        elif command == "list":
             fs.list_files()
-        elif cmd.startswith("create "):
-            parts = cmd.split(" ", 2)
-            if len(parts) < 3:
+        elif command == "create":
+            # Se esperan dos argumentos: nombre_archivo y ruta_fuente
+            args_parts = args_str.split(" ", 1)
+            if len(args_parts) < 2:
                 print("Uso: create <nombre_archivo> <ruta_fuente>")
                 continue
-            filename = parts[1]
-            source_path = parts[2]
+            filename = args_parts[0]
+            source_path = args_parts[1]
             if fs.create_file(filename, source_path):
                 print("Archivo creado exitosamente.")
             else:
                 print("Error al crear el archivo.")
-        elif cmd.startswith("read "):
-            parts = cmd.split(" ", 1)
-            if len(parts) < 2:
+        elif command == "read":
+            if not args_str:
                 print("Uso: read <nombre_archivo>")
                 continue
-            filename = parts[1]
+            filename = args_str
             data = fs.read_file(filename)
             if data:
                 try:
                     print(data.decode('utf-8', errors='replace'))
                 except Exception as e:
                     print(f"Error al decodificar el archivo: {e}")
-        elif cmd.startswith("delete "):
-            parts = cmd.split(" ", 1)
-            filename = parts[1]
+        elif command == "delete":
+            if not args_str:
+                print("Uso: delete <nombre_archivo>")
+                continue
+            filename = args_str
             if fs.delete_file(filename):
                 print("Archivo borrado.")
             else:
                 print("Error al borrar el archivo.")
-        elif cmd.startswith("rename "):
-            parts = cmd.split(" ", 2)
-            if len(parts) < 3:
+        elif command == "rename":
+            args_parts = args_str.split(" ", 1)
+            if len(args_parts) < 2:
                 print("Uso: rename <nombre_actual> <nuevo_nombre>")
                 continue
-            old_name = parts[1]
-            new_name = parts[2]
+            old_name = args_parts[0]
+            new_name = args_parts[1]
             if fs.rename_file(old_name, new_name):
                 print("Archivo renombrado.")
             else:
                 print("Error al renombrar el archivo.")
-        elif cmd == "format":
+        elif command == "format":
             confirm = input("¿Está seguro de formatear el disco? Esto borrará todos los datos (yes/no): ")
             if confirm.lower() == "yes":
                 fs.format()
